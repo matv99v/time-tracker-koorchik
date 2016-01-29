@@ -1,0 +1,167 @@
+[
+    {
+        "inputs": {
+            "name":       "Виктор",
+            "email":      "user@aaaa.com",
+            "username":   "koorchik",
+            "password":   "poiuyTr+e1",
+            "repassword": "poiuyTr+e1",
+            "month":      "02",
+            "day":        "20",
+            "year":       "1984",
+            "gender":     "m",
+            "phone":      "+(388)994-00-04"
+        },
+        "errors": {
+            "name": "",
+            "email": "",
+            "username": "",
+            "password": "",
+            "repassword": "",
+            "birthday": "",
+            "phone": ""
+        }
+    },
+
+    {
+        "inputs": {
+            "name":       "",
+            "email":      "",
+            "username":   "",
+            "password":   "",
+            "repassword": "",
+            "month":      "",
+            "day":        "",
+            "year":       "",
+            "gender":     "",
+            "phone":      ""
+        },
+        "errors": {
+            "name": "Required",
+            "email": "Required",
+            "username": "Required",
+            "password": "Required",
+            "repassword": "Required",
+            "birthday": "",
+            "phone": ""
+        }
+    },
+
+    {
+        "inputs": {
+            "email": "name.email.com"
+        },
+        "errors": {
+            "email": "Wrong email format"
+        }
+    },
+
+    {
+        "inputs": {
+            "email": "@gmail.com"
+        },
+        "errors": {
+            "email": "Wrong email format"
+        }
+    },
+
+    {
+        "inputs": {
+            "email": "name@gmail@com.com"
+        },
+        "errors": {
+            "email": "Wrong email format"
+        }
+    },
+
+    {
+        "inputs": {
+            "email": "user@my_domain.com"
+        },
+        "errors": {
+            "email": "Wrong email format"
+        }
+    },
+
+
+    {
+        "inputs": {
+            "password": "short"
+        },
+        "errors": {
+            "password": "Should contain at least 8 characters"
+        }
+    },
+
+    {
+        "inputs": {
+            "password": "longlonglonglong"
+        },
+        "errors": {
+            "password": "Should contain at least one digit"
+        }
+    },
+
+
+    {
+        "inputs": {
+            "password": "longlonglonglonglonglong8"
+        },
+        "errors": {
+            "password": "Should contain at least one special character"
+        }
+    },
+
+    {
+        "inputs": {
+            "password": "longlonglonglonglonglong8+"
+        },
+        "errors": {
+            "password": "Should contain at least one uppercase letter"
+        }
+    },
+
+    {
+        "inputs": {
+            "month":      "02",
+            "day":         "aa",
+            "year":        ""
+        },
+        "errors": {
+            "birthday": "Invalid date"
+        }
+    },
+
+    {
+        "inputs": {
+            "month":      "02",
+            "day":         "30",
+            "year":        "2020"
+        },
+        "errors": {
+            "birthday": "Date should not be in future"
+        }
+    },
+
+    {
+        "inputs": {
+            "name":       "Viktor10",
+            "email":      "user@mai_l.com",
+            "password":   "pass",
+            "repassword": "password",
+            "month":      "02",
+            "day":         20,
+            "year":        2020,
+            "gender":      "m",
+            "phone":       "123123/123"
+        },
+        "errors": {
+            "name": "Should contain only letters latin/cyrillic",
+            "email": "Wrong email format",
+            "password": "Should contain at least 8 characters",
+            "repassword": "Should be equal to password",
+            "phone": "Wrong number",
+            "birthday": "Date should not be in future"
+        }
+    }
+]
