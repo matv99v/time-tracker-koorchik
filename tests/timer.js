@@ -24,6 +24,11 @@ test('Check timer measurements', (done) => {
     timer.start();
 
     setTimeout(() => {
+        timer.stop();
+        timer.start();
+    }, 250);
+
+    setTimeout(() => {
         assert.closeTo(timer.getSpentTime(), 500, 50);
     }, 500);
 
