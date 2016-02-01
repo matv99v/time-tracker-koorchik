@@ -13,7 +13,7 @@ class Timer {
     }
 
     stop() {
-        if (! this.isActive ) return;
+        if ( !this.isActive ) return;
 
         this.isActive = false;
         this.spent += new Date().getTime() - this.lastSessionStartetAt;

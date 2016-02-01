@@ -1,8 +1,8 @@
 'use strict';
 
 function validateRegistrationData(formData) {
-    var validationRules = {
-        name: function(value) {
+    const validationRules = {
+        name(value) {
             if (!value) {
                 return 'Required';
             }
@@ -12,21 +12,20 @@ function validateRegistrationData(formData) {
             }
         },
 
-        email: function(value) {
-            value = value || '';
-
+        email(value) {
             if (!value) {
                 return 'Required';
             }
 
-            var emailRe = /^([\w\-_+]+(?:\.[\w\-_+]+)*)@((?:[a-z0-9\-]+\.)*[a-z0-9][a-z0-9\-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+            /* eslint-disable max-len */
+            const emailRe = /^([\w\-_+]+(?:\.[\w\-_+]+)*)@((?:[a-z0-9\-]+\.)*[a-z0-9][a-z0-9\-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 
-            if ( !emailRe.test(value) ) {
+            if ( !emailRe.test(value || '') ) {
                 return 'Wrong email format';
             }
         },
 
-        username: function(value) {
+        username(value) {
             if (!value) {
                 return 'Required';
             }
@@ -36,7 +35,7 @@ function validateRegistrationData(formData) {
             }
         },
 
-        password: function(value) {
+        password(value) {
             if (!value) {
                 return 'Required';
             }
@@ -59,14 +58,14 @@ function validateRegistrationData(formData) {
 
         },
 
-        repassword: function(value) {
+        repassword(value) {
             if (!value) {
                 return 'Required';
             }
 
         },
 
-        phone: function(value) {
+        phone(value) {
             if ( !value.match(/^[0-9+()\- ]*$/) ) {
                 return 'Wrong number';
             }
@@ -74,7 +73,7 @@ function validateRegistrationData(formData) {
         }
     };
 
-    var errors = validateData(validationRules, formData);
+    let errors = validateData(validationRules, formData);
 
     // Validate password equality
     if ( formData.password !== formData.repassword ) {
@@ -83,7 +82,7 @@ function validateRegistrationData(formData) {
     }
 
     // Validate birthday
-    var birthday = new Date(+formData.year, +formData.month-1, +formData.day);
+    const birthday = new Date(+formData.year, +formData.month - 1, +formData.day);
 
     if ( isNaN( birthday.getTime() ) ) {
         errors = errors || {};
@@ -98,12 +97,12 @@ function validateRegistrationData(formData) {
 
 
 function validateData(validationRules, data) {
-    var errors = {};
+    const errors = {};
 
-    for (var field in data) {
-        var value      = data[field];
-        var validator  = validationRules[field] || function() {};
-        var fieldError = validator(value);
+    for (const field in data) {
+        const value      = data[field];
+        const validator  = validationRules[field] || function() {};
+        const fieldError = validator(value);
 
         if (fieldError) {
             errors[field] = fieldError;
@@ -113,8 +112,6 @@ function validateData(validationRules, data) {
 
     if ( Object.keys(errors).length ) {
         return errors;
-    } else {
-        return;
     }
 }
 
