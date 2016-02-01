@@ -6,7 +6,8 @@
   "scripts": {
     "test_timer": "mocha --timeout 60000 --reporter spec --ui qunit tests/timer.js",
     "test_validation": "mocha --timeout 60000 --reporter spec --ui qunit tests/validate_registration_data.js",
-    "webpack": "webpack --watch -d"
+    "webpack": "webpack --watch -d",
+    "lint": "eslint src"
   },
   "author": "",
   "license": "ISC",
@@ -14,14 +15,14 @@
     "autoprefixer-loader": "*",
     "babel": "5.*",
     "babel-core": "5.*",
-    "babel-eslint": "^4.1.1",
+    "babel-eslint": "^4.1.7",
     "babel-loader": "5.*",
     "babel-plugin-react-autoprefix": "^0.2.6",
     "chai": "^3.5.0",
     "css-loader": "^0.22.0",
-    "eslint": "^1.9.0",
+    "eslint": "^1.10.3",
     "eslint-loader": "^1.1.1",
-    "eslint-plugin-react": "^3.8.0",
+    "eslint-plugin-react": "^3.16.1",
     "file-loader": "^0.8.4",
     "json-loader": "^0.5.3",
     "less": "^2.5.3",
