@@ -16,7 +16,6 @@ test('Test timer object API', () => {
     assert.isFunction(timer.getSpentTime, 'timer should have method [getSpentTime]');
 });
 
-
 test('Check timer measurements', (done) => {
     const timer = new Timer();
 
@@ -35,7 +34,7 @@ test('Check timer measurements', (done) => {
     setTimeout(() => {
         timer.stop();
         assert.closeTo(timer.getSpentTime(), 1000, 50);
-    }, 1000)
+    }, 1000);
 
     setTimeout(() => {
         assert.closeTo(timer.getSpentTime(), 1000, 50);

@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test_timer": "mocha --timeout 60000 --reporter spec --ui qunit tests/timer.js",
-    "test_validation": "mocha --timeout 60000 --reporter spec --ui qunit tests/validate_registration_data.js",
+    "test_mocha": "mocha --timeout 60000 --reporter spec --ui qunit tests/*.js",
     "webpack": "webpack --watch -d",
-    "lint": "eslint src"
+    "lint": "eslint src tests",
+    "test": "npm run lint && npm run test_mocha"
   },
   "author": "",
   "license": "ISC",
