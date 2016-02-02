@@ -9,7 +9,7 @@ class Timer {
 
     start() {
         this.isActive  = true;
-        this.lastSessionStartetAt = new Date().getTime();
+        this.lastSessionStartetAt = new Date().getTime()
     }
 
     stop() {
