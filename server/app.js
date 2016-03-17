@@ -64,18 +64,54 @@ app.post('/api/v1/tasks', (req, res) => {
     }
 });
 
-app.delete('/api/v1/tasks/:id', (req, res) => {
-    db.tasks.find((err, tasks) => {
-        if (err) throw err;
+app.put('/api/v1/tasks/:id/start', (req, res) => {
+    const id = req.params.id;
+    const taskData = loadTask(id);
+    taskData.status = 'ACTIVE';
+    save(id, taskData);
+});
 
-        res.json({
-            status: 1,
-            data: tasks.map(formatUtils.dumpTask)
-        });
+app.put('/api/v1/tasks/:id/stop', (req, res) => {
+    const id = req.params.id;
+
+    const taskData = loadTask(id);
+
+    const timer = new Timer({
+        startTime: taskData.startTime,
+        status: taskData.status,
+        spent: taskData.spent
+    });
+
+    timer.stop();
+
+    saveTask({
+        ...taskData,
+        spent: timer.getSpentTime(),
+        status: 'INACTIVE'
+    });
+});
+
+app.put('/api/v1/tasks/:id/clear', (req, res) => {
+    const id = req.params.id;
+
+    saveTask({
+        ...taskData,
+        spent: 0
     });
 });
 
 
+app.delete('/api/v1/tasks/:id', (req, res) => {
+    const id = req.params.id;
+
+    // TODO validate and handle wrong ids
+
+    db.tasks.removeAsync({_id: mongojs.ObjectId(id)}).then( () => {
+        res.json({
+            status: 1
+        });
+    });
+});
 
 app.listen(3000, () => {
     console.log('Example app listening on port 3000!');
