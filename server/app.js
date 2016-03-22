@@ -1,117 +1,61 @@
 'use strict';
 
-const express     = require('express');
-const bodyParser  = require('body-parser');
+// DB instance
+import Promise from 'bluebird';
 const mongojs     = require('mongojs');
-const formatUtils = require('./formatUtils');
-const Promise     = require('bluebird');
-
 Promise.promisifyAll([
     require('mongojs/lib/collection'),
     require('mongojs/lib/database'),
     require('mongojs/lib/cursor')
 ]);
 
+const db = mongojs('timer-tracker', ['tasks']);
 
-const LIVR = require('livr');
-LIVR.Validator.defaultAutoTrim(true);
+// Services
+import TasksCreateService  from './services/tasks/Create';
+import TasksCommandService from './services/tasks/Command';
+import TasksListService    from './services/tasks/List';
+import TasksDeleteService  from './services/tasks/Delete';
+
+// Web app
+import express    from 'express';
+import bodyParser from 'body-parser';
 
 const app = express();
 app.use( bodyParser.json() );
 
-const db = mongojs('timer-tracker', ['tasks']);
-
+// Routes
 app.get('/api/v1/tasks', (req, res) => {
-    db.tasks.findAsync().then(tasks => {
-        res.json({
-            status: 1,
-            data: tasks.map(formatUtils.dumpTask)
-        });
-    }).catch(console.error);
+    sendResult( new TasksListService({db}).run({}), res );
 });
 
 app.post('/api/v1/tasks', (req, res) => {
-    const data = req.body;
+    const params = req.body;
 
-    const validator = new LIVR.Validator({
-        data: ['required', {'nested_object': {
-            name: [ 'required', {'min_length': 3} ]
-        }}]
-    });
-
-    const validData = validator.validate(data);
-
-    if (validData) {
-        const taskData = {
-            name: validData.data.name,
-            spent: 0,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            status: 'INACTIVE'
-        };
-
-        db.tasks.saveAsync(taskData).then( savedTask => {
-            res.json({
-                status: 1,
-                data: formatUtils.dumpTask(savedTask)
-            });
-        }).catch(console.error);
-    } else {
-        res.json({
-            status: 0,
-            error: validator.getErrors()
-        });
-    }
+    sendResult( new TasksCreateService({db}).run(params), res );
 });
 
-app.put('/api/v1/tasks/:id/start', (req, res) => {
+app.put('/api/v1/tasks/:id/:command', (req, res) => {
     const id = req.params.id;
-    const taskData = loadTask(id);
-    taskData.status = 'ACTIVE';
-    save(id, taskData);
+    const command = req.params.command;
+
+    sendResult( new TasksCommandService({db}).run({id, command}), res );
 });
-
-app.put('/api/v1/tasks/:id/stop', (req, res) => {
-    const id = req.params.id;
-
-    const taskData = loadTask(id);
-
-    const timer = new Timer({
-        startTime: taskData.startTime,
-        status: taskData.status,
-        spent: taskData.spent
-    });
-
-    timer.stop();
-
-    saveTask({
-        ...taskData,
-        spent: timer.getSpentTime(),
-        status: 'INACTIVE'
-    });
-});
-
-app.put('/api/v1/tasks/:id/clear', (req, res) => {
-    const id = req.params.id;
-
-    saveTask({
-        ...taskData,
-        spent: 0
-    });
-});
-
 
 app.delete('/api/v1/tasks/:id', (req, res) => {
     const id = req.params.id;
 
-    // TODO validate and handle wrong ids
-
-    db.tasks.removeAsync({_id: mongojs.ObjectId(id)}).then( () => {
-        res.json({
-            status: 1
-        });
-    });
+    sendResult( new TasksDeleteService({db}).run({id}), res );
 });
+
+function sendResult(resultPromise, response) {
+    resultPromise.then(data => {
+        response.json({ status: 1, data });
+    }).catch( error => {
+        console.log(error);
+        response.json({ status: 0, error });
+    });
+}
 
 app.listen(3000, () => {
     console.log('Example app listening on port 3000!');

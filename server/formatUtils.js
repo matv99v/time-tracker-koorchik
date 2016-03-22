@@ -1,11 +1,8 @@
+const Timer = require('../src/Timer');
 
 module.exports = {
     dumpTask(taskData) {
-        const timer = new Timer({
-            startTime: taskData.startTime,
-            status: taskData.status,
-            spent: taskData.spent
-        });
+        const timer = new Timer({state: taskData.timerState});
 
         return {
             id:        taskData._id,
@@ -13,7 +10,7 @@ module.exports = {
             spent:     timer.getSpentTime(),
             createdAt: taskData.createdAt,
             updatedAt: taskData.updatedAt,
-            status:    taskData.status
+            status:    timer.isActive() ? 'ACTIVE' : 'INACTIVE'
         };
     }
 };
